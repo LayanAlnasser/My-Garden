@@ -6,7 +6,7 @@ Built using [MkDocs Material](https://squidfunk.github.io/mkdocs-material/), thi
 ---
 
 ## Live Site
-🔗 *Add your site link here once deployed*
+🔗 (https://layanalnasser.github.io/My-Garden/)
 
 ---
 
