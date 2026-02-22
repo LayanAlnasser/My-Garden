@@ -8,14 +8,27 @@
     } catch (e) {}
     return "";
   }
-
-  // Always produce a valid MkDocs link under whatever base path you're deployed to
+  
   function url(path) {
-    const base = getBase().replace(/\/$/, ""); // remove trailing slash
-    const clean = String(path || "").replace(/^\//, ""); // remove leading slash
-    // Allow empty path -> base + "/"
-    const joined = `${base}/${clean}`.replace(/\/+/g, "/");
-    return clean ? joined : `${base}/`;
+    const base = (getBase() || "").replace(/\/$/, "");
+    const raw = String(path || "");
+
+    // root
+    if (!raw || raw === "/") return `${base}/`;
+
+    const clean = raw.replace(/^\//, "");
+
+    // If user passed an explicit file (".html", ".pdf", etc), keep it.
+    const hasExt = /\.[a-z0-9]{2,5}($|\?)/i.test(clean);
+
+    // If it's a "folder-ish" path (ends with "/"), keep it.
+    const endsWithSlash = clean.endsWith("/");
+
+    // Otherwise, assume it's a MkDocs page and make it directory-style.
+    // This avoids broken links when use_directory_urls=true.
+    const normalized = hasExt || endsWithSlash ? clean : `${clean}/`;
+
+    return `${base}/${normalized}`.replace(/\/+/g, "/");
   }
 
   function getSiteName() {
@@ -71,11 +84,6 @@
 
     const siteName = getSiteName();
 
-    // Matches your nav:
-    // Home
-    // Academics: Overview, Notes & Learning, Resources
-    // Career Development: About Me, Resume / CV, Projects, Activities & Workshops
-    // Links
     block.innerHTML = `
       <div class="custom-footer__inner">
         <div class="custom-footer__left">
@@ -125,7 +133,16 @@
           <div class="footer-col">
             <div class="footer-col__title">Links</div>
             <a class="footer-link" href="${url("links/")}">Links</a>
+
             <div style="height:10px"></div>
+
+            <div class="footer-col__title">Policies</div>
+            <a class="footer-link" href="${url("privacy-notice/")}">Privacy Notice</a>
+            <a class="footer-link" href="${url("academic-disclaimer/")}">Academic Disclaimer</a>
+            <a class="footer-link" href="${url("copyright/")}">Copyright</a>
+
+            <div style="height:10px"></div>
+
             <div class="footer-col__title">Contact</div>
             <a class="footer-link" href="mailto:${EMAIL}">${EMAIL}</a>
             <a class="footer-link" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
