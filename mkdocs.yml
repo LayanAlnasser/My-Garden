@@ -6,11 +6,16 @@ theme:
   name: material
   features:
     - navigation.tabs
+    - navigation.tabs.sticky       
     - navigation.sections
-    - navigation.instant
+    - navigation.indexes     
+    - navigation.top
+    - navigation.path
     - search.suggest
     - search.highlight
+    - search.share
     - content.code.copy
+    - toc.follow 
   palette:
     - scheme: default
       primary: red
@@ -68,3 +73,7 @@ plugins:
 
 extra_css:
   - styles/extra.css
+
+extra_javascript:
+  - javascripts/cta-footer.js
+
