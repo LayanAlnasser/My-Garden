@@ -9,9 +9,13 @@
     return "";
   }
 
+  // Always produce a valid MkDocs link under whatever base path you're deployed to
   function url(path) {
-    const base = getBase();
-    return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+    const base = getBase().replace(/\/$/, ""); // remove trailing slash
+    const clean = String(path || "").replace(/^\//, ""); // remove leading slash
+    // Allow empty path -> base + "/"
+    const joined = `${base}/${clean}`.replace(/\/+/g, "/");
+    return clean ? joined : `${base}/`;
   }
 
   function getSiteName() {
@@ -67,6 +71,11 @@
 
     const siteName = getSiteName();
 
+    // Matches your nav:
+    // Home
+    // Academics: Overview, Notes & Learning, Resources
+    // Career Development: About Me, Resume / CV, Projects, Activities & Workshops
+    // Links
     block.innerHTML = `
       <div class="custom-footer__inner">
         <div class="custom-footer__left">
@@ -88,33 +97,35 @@
           </form>
 
           <div class="custom-footer__note">
-            By entering your email, you agree to be contacted regarding this research project.
+            By entering your email, you agree to be contacted.
           </div>
         </div>
 
         <div class="custom-footer__right">
           <div class="footer-col">
-            <div class="footer-col__title">Project</div>
+            <div class="footer-col__title">Home</div>
             <a class="footer-link" href="${url("")}">Home</a>
-            <a class="footer-link" href="${url("introduction/")}">Overview</a>
-            <a class="footer-link" href="${url("about/contributors/")}">Contributors</a>
           </div>
 
           <div class="footer-col">
-            <div class="footer-col__title">Resources</div>
-            <a class="footer-link" href="${url("paper/paper/")}">IEEE Paper</a>
-            <a class="footer-link" href="${url("paper/slides/")}">Slides</a>
-            <a class="footer-link" href="${url("dataset/")}">Dataset</a>
+            <div class="footer-col__title">Academics</div>
+            <a class="footer-link" href="${url("academics/")}">Overview</a>
+            <a class="footer-link" href="${url("academics/notes/")}">Notes &amp; Learning</a>
+            <a class="footer-link" href="${url("academics/resources/")}">Resources</a>
           </div>
 
           <div class="footer-col">
-            <div class="footer-col__title">Legal</div>
-            <a class="footer-link" href="${url("privacy-notice/")}">Privacy Notice</a>
-            <a class="footer-link" href="${url("academic-disclaimer/")}">Academic Disclaimer</a>
-            <a class="footer-link" href="${url("copyright/")}">Copyright</a>
+            <div class="footer-col__title">Career Development</div>
+            <a class="footer-link" href="${url("career/about/")}">About Me</a>
+            <a class="footer-link" href="${url("career/cv/")}">Resume / CV</a>
+            <a class="footer-link" href="${url("career/projects/")}">Projects</a>
+            <a class="footer-link" href="${url("career/activities/")}">Activities &amp; Workshops</a>
           </div>
 
           <div class="footer-col">
+            <div class="footer-col__title">Links</div>
+            <a class="footer-link" href="${url("links/")}">Links</a>
+            <div style="height:10px"></div>
             <div class="footer-col__title">Contact</div>
             <a class="footer-link" href="mailto:${EMAIL}">${EMAIL}</a>
             <a class="footer-link" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
@@ -133,6 +144,7 @@
     styleFooterMetaToMatch();
   }
 
+  // MkDocs Material instant navigation support
   if (typeof document$ !== "undefined" && document$.subscribe) {
     document$.subscribe(run);
   } else {
