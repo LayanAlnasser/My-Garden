@@ -1,6 +1,12 @@
 (function () {
   const EMAIL = "Layanaalnasser@gmail.com";
+  const GITHUB = "https://github.com/LayanAlnasser";
   const LINKEDIN = "https://www.linkedin.com/in/layan-alnasser";
+  const BLUEPRINT = "https://blueprint.shoug-tech.com/";
+  const STORAGE_KEYS = {
+    nav: "garden-layout-hide-nav",
+    toc: "garden-layout-hide-toc",
+  };
 
   function getBase() {
     try {
@@ -36,17 +42,146 @@
     return titleEl ? titleEl.textContent.trim() : "Website";
   }
 
-  function addHeaderCTA() {
+  function addHeaderBrand() {
     const headerInner = document.querySelector(".md-header__inner");
-    if (!headerInner) return;
-    if (headerInner.querySelector("a.header-cta")) return;
+    const logo = headerInner?.querySelector(".md-logo");
+    if (!headerInner || !logo) return;
+
+    const existing = headerInner.querySelector(".header-brand");
+    if (existing) {
+      existing.textContent = getSiteName();
+      return;
+    }
+
+    const brand = document.createElement("a");
+    brand.className = "header-brand";
+    brand.href = url("");
+    brand.textContent = getSiteName();
+    brand.setAttribute("aria-label", getSiteName());
+    logo.insertAdjacentElement("afterend", brand);
+  }
+
+  function getHeaderActions() {
+    const headerInner = document.querySelector(".md-header__inner");
+    if (!headerInner) return null;
+
+    let actions = headerInner.querySelector(".header-actions");
+    if (!actions) {
+      actions = document.createElement("div");
+      actions.className = "header-actions";
+      headerInner.appendChild(actions);
+    }
+
+    return actions;
+  }
+
+  function addHeaderCTA() {
+    const actions = getHeaderActions();
+    if (!actions) return;
+
+    const existing = document.querySelector("a.header-cta");
+    if (existing) {
+      actions.appendChild(existing);
+      return;
+    }
 
     const cta = document.createElement("a");
     cta.className = "header-cta";
     cta.href = `mailto:${EMAIL}`;
     cta.textContent = "Contact";
     cta.setAttribute("aria-label", "Contact");
-    headerInner.appendChild(cta);
+    actions.appendChild(cta);
+  }
+
+  function addHeaderLinks() {
+    const actions = getHeaderActions();
+    if (!actions) return;
+
+    const links = [
+      { cls: "header-link header-link--github", href: GITHUB, label: "GitHub" },
+      { cls: "header-link header-link--linkedin", href: LINKEDIN, label: "LinkedIn" },
+    ];
+
+    links.forEach(({ cls, href, label }) => {
+      let link = actions.querySelector(`.${cls.split(" ").join(".")}`);
+      if (!link) {
+        link = document.createElement("a");
+        link.className = cls;
+        link.target = "_blank";
+        link.rel = "noopener";
+        actions.appendChild(link);
+      }
+
+      link.href = href;
+      link.textContent = label;
+      link.setAttribute("aria-label", label);
+    });
+  }
+
+  function setLayoutState(type, hidden) {
+    const className = type === "nav" ? "layout-hide-nav" : "layout-hide-toc";
+    document.body.classList.toggle(className, hidden);
+
+    try {
+      localStorage.setItem(
+        type === "nav" ? STORAGE_KEYS.nav : STORAGE_KEYS.toc,
+        hidden ? "1" : "0"
+      );
+    } catch (e) {}
+  }
+
+  function syncToggleLabels() {
+    document.querySelectorAll(".layout-toggle").forEach((button) => {
+      const type = button.getAttribute("data-target");
+      const hidden = document.body.classList.contains(
+        type === "nav" ? "layout-hide-nav" : "layout-hide-toc"
+      );
+
+      button.setAttribute("aria-pressed", hidden ? "false" : "true");
+      button.textContent = hidden
+        ? `Show ${type === "nav" ? "Nav" : "TOC"}`
+        : `Hide ${type === "nav" ? "Nav" : "TOC"}`;
+    });
+  }
+
+  function applyStoredLayoutState() {
+    try {
+      setLayoutState("nav", localStorage.getItem(STORAGE_KEYS.nav) === "1");
+      setLayoutState("toc", localStorage.getItem(STORAGE_KEYS.toc) === "1");
+    } catch (e) {
+      document.body.classList.remove("layout-hide-nav", "layout-hide-toc");
+    }
+
+    syncToggleLabels();
+  }
+
+  function addLayoutToggles() {
+    const actions = getHeaderActions();
+    if (!actions) return;
+
+    const existing = document.querySelector(".header-layout-tools");
+    if (existing) {
+      actions.prepend(existing);
+      return;
+    }
+
+    const tools = document.createElement("div");
+    tools.className = "header-layout-tools";
+    tools.innerHTML = `
+      <button class="layout-toggle" type="button" data-target="nav" aria-label="Toggle side navigation"></button>
+      <button class="layout-toggle" type="button" data-target="toc" aria-label="Toggle table of contents"></button>
+    `;
+
+    actions.prepend(tools);
+
+    tools.querySelectorAll(".layout-toggle").forEach((button) => {
+      button.addEventListener("click", () => {
+        const type = button.getAttribute("data-target");
+        const className = type === "nav" ? "layout-hide-nav" : "layout-hide-toc";
+        setLayoutState(type, !document.body.classList.contains(className));
+        syncToggleLabels();
+      });
+    });
   }
 
   function styleFooterMetaToMatch() {
@@ -71,6 +206,20 @@
     meta.querySelectorAll("*").forEach((el) => {
       el.style.color = "inherit";
     });
+  }
+
+  function setFooterMetaLine() {
+    const copyright = document.querySelector(".md-footer-meta .md-copyright");
+    const highlight = copyright?.querySelector(".md-copyright__highlight");
+    if (!copyright || !highlight) return;
+
+    copyright.innerHTML = "";
+    copyright.appendChild(highlight);
+
+    const suffix = document.createElement("span");
+    suffix.className = "footer-meta-credit";
+    suffix.innerHTML = `<span class="footer-meta-sep">|</span> Made by <a href="${BLUEPRINT}" target="_blank" rel="noopener">Blueprint</a>`;
+    copyright.appendChild(suffix);
   }
 
   function addFooterBlock() {
@@ -145,6 +294,7 @@
 
             <div class="footer-col__title">Contact</div>
             <a class="footer-link" href="mailto:${EMAIL}">${EMAIL}</a>
+            <a class="footer-link" href="${GITHUB}" target="_blank" rel="noopener">GitHub</a>
             <a class="footer-link" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a>
           </div>
         </div>
@@ -156,9 +306,14 @@
   }
 
   function run() {
+    addHeaderBrand();
+    addLayoutToggles();
+    addHeaderLinks();
     addHeaderCTA();
     addFooterBlock();
     styleFooterMetaToMatch();
+    setFooterMetaLine();
+    applyStoredLayoutState();
   }
 
   // MkDocs Material instant navigation support
