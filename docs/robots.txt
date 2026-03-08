@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://layanalnasser.github.io/CS316-Mental-Health-AI-Project/sitemap.xml
+Sitemap: https://layanalnasser.github.io/https://layanalnasser.github.io/My-Garden/sitemap.xml
