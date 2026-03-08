@@ -7,7 +7,7 @@ A curated list of links I often use or want to remember.
 ## Personal Links
 
 - **GitHub:** [github.com/LayanAlnasser](https://github.com/LayanAlnasser)  
-- **LinkedIn:** _Add link here if you have one_  
+- **LinkedIn:** [layan-alnasser](https://www.linkedin.com/in/layan-alnasser/)  
 - **Portfolio / Other Sites:** _Add any other relevant links_
 
 ---
