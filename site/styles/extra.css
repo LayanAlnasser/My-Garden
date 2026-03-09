@@ -644,13 +644,9 @@ body[data-md-color-scheme="default"] .md-search__input{
 .custom-footer{
   position: relative !important;
   overflow: hidden !important;
-<<<<<<< HEAD
-  padding: 42px 20px 32px !important;
-=======
   width: 100% !important;
   max-width: none !important;
   padding: 42px 0 32px !important;
->>>>>>> f9478e1 (Add sitemap and new styles for enhanced UI/UX)
   isolation: isolate;
 }
 
@@ -715,17 +711,6 @@ body[data-md-color-scheme="default"] .md-search__input{
 }
 
 .custom-footer__inner{
-<<<<<<< HEAD
-  max-width: 1240px !important;
-  margin: 0 auto !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.15fr) minmax(460px, 0.85fr) !important;
-  gap: 28px !important;
-  position: relative;
-  z-index: 1;
-  animation: footerRise 700ms ease both;
-  padding: 30px;
-=======
   width: min(100%, 100vw - 32px) !important;
   max-width: 1680px !important;
   margin: 0 auto !important;
@@ -736,7 +721,6 @@ body[data-md-color-scheme="default"] .md-search__input{
   z-index: 1;
   animation: footerRise 700ms ease both;
   padding: 34px;
->>>>>>> f9478e1 (Add sitemap and new styles for enhanced UI/UX)
   border-radius: 28px;
 }
 
@@ -1266,8 +1250,6 @@ body[data-md-color-scheme="default"] .md-search__input{
     grid-template-columns: 1fr;
   }
 
-<<<<<<< HEAD
-=======
   .custom-footer{
     padding: 26px 0 24px !important;
   }
@@ -1278,7 +1260,6 @@ body[data-md-color-scheme="default"] .md-search__input{
     border-radius: 22px;
   }
 
->>>>>>> f9478e1 (Add sitemap and new styles for enhanced UI/UX)
   .ai-actions{
     flex-direction: column;
   }

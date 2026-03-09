@@ -19,21 +19,21 @@ theme:
   palette:
     - scheme: default
       primary: red
-      accent: deep orange
+      accent: red
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - scheme: slate
       primary: red
-      accent: deep orange
+      accent: red
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
   icon:
     logo: material/robot-outline
   font:
-    text: Inter
-    code: Fira Code
+    text: Space Grotesk
+    code: JetBrains Mono
 
 nav:
   - Home: index.md
@@ -76,4 +76,3 @@ extra_css:
 
 extra_javascript:
   - javascripts/cta-footer.js
-
